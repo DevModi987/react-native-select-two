@@ -7,6 +7,10 @@ import Button from './lib/Button';
 import TagItem from './lib/TagItem';
 import utilities from './lib/utilities';
 import PropTypes from 'prop-types';
+import changeNavigationBarColor from 'react-native-navigation-bar-color';
+
+let ScreenWidth = Dimensions.get("screen").width;
+let ScreenHeight = Dimensions.get("screen").height;
 
 const { height } = Dimensions.get('window');
 const INIT_HEIGHT = height * 0.5;
@@ -115,8 +119,8 @@ class Select2 extends Component {
                 key={idx}
                 onPress={() => this.onItemSelected(item, isSelectSingle)}
                 activeOpacity={0.7}
-                style={styles.itemWrapper}>
-                <Text style={[styles.itemText, this.defaultFont]}>
+                style={[styles.itemWrapper,{borderBottomColor:this.props.borderAllColor}]}>
+                <Text style={[styles.itemText, this.defaultFont,{color:this.props.itemTextColor}]}>
                     {item.name}
                 </Text>
                 <Icon style={styles.itemIcon}
@@ -128,7 +132,7 @@ class Select2 extends Component {
     renderEmpty = () => {
         let { listEmptyTitle } = this.props;
         return (
-            <Text style={[styles.empty, this.defaultFont]}>
+            <Text style={[styles.empty, this.defaultFont,{color:this.props.placeholderTextColor}]}>
                 {listEmptyTitle}
             </Text>
         );
@@ -140,7 +144,8 @@ class Select2 extends Component {
         let {
             style, modalStyle, title, onSelect, onRemoveItem, popupTitle, colorTheme,
             isSelectSingle, cancelButtonText, selectButtonText, searchPlaceHolderText,
-            selectedTitleStyle, buttonTextStyle, buttonStyle, showSearchBox
+            selectedTitleStyle, buttonTextStyle, buttonStyle, showSearchBox,defaultFontName,
+            tagBgColor,tagColor,itemTextColor,placeholderTextColor,cancelButtonBgColor,borderAllColor,bottomNavShowColor,bottomNavHideColor
         } = this.props;
         let { show, selectedItem, preSelectedItem } = this.state;
         return (
@@ -148,7 +153,8 @@ class Select2 extends Component {
                 onPress={this.showModal}
                 activeOpacity={0.7}
                 style={[styles.container, style]}>
-                <Modal
+                <Modal           
+                    animationIn={"slideInUp"}         
                     onBackdropPress={this.closeModal}
                     style={{
                         justifyContent: 'flex-end',
@@ -158,7 +164,14 @@ class Select2 extends Component {
                     animationInTiming={300}
                     animationOutTiming={300}
                     hideModalContentWhileAnimating
-                    isVisible={show}>
+                    backdropColor={'#222222'}
+                    backdropOpacity={0.7}     
+                    backdropTransitionOutTiming={0}   
+                    statusBarTranslucent
+                    isVisible={show}
+                    onModalWillShow={()=>{changeNavigationBarColor(bottomNavShowColor, true)}}    
+                    onModalWillHide={()=>{changeNavigationBarColor(bottomNavHideColor, true)}}
+                    >
                     <SafeAreaView style={{justifyContent: 'flex-end', margin: 0}}> 
                     <Animated.View style={[styles.modalContainer, modalStyle, { height: this.animatedHeight }]}>
                         <View>
@@ -166,14 +179,15 @@ class Select2 extends Component {
                                 {popupTitle || title}
                             </Text>
                         </View>
-                        <View style={styles.line} />
+                        <View style={[styles.line,{backgroundColor:borderAllColor}]} />
                         {
                             showSearchBox
                                 ? <TextInput
                                     underlineColorAndroid='transparent'
                                     returnKeyType='done'
-                                    style={[styles.inputKeyword, this.defaultFont]}
+                                    style={[styles.inputKeyword, this.defaultFont,{color:itemTextColor,borderColor:borderAllColor}]}
                                     placeholder={searchPlaceHolderText}
+                                    placeholderTextColor={placeholderTextColor}
                                     selectionColor={colorTheme}
                                     onChangeText={keyword => this.setState({ keyword })}
                                     onFocus={() => {
@@ -209,7 +223,7 @@ class Select2 extends Component {
                                 }}
                                 title={cancelButtonText}
                                 textColor={colorTheme}
-                                backgroundColor='#fff'
+                                backgroundColor={cancelButtonBgColor}
                                 textStyle={buttonTextStyle}
                                 style={[styles.button, buttonStyle, { marginRight: 5, marginLeft: 10, borderWidth: 1, borderColor: colorTheme }]} />
                             <Button
@@ -259,7 +273,11 @@ class Select2 extends Component {
                                                         this.setState({ data, preSelectedItem });
                                                         onRemoveItem && onRemoveItem(selectedIds, selectedObjectItems);
                                                     }}
-                                                    tagName={tag.name} />
+                                                    tagName={tag.name}
+                                                    defaultFontName={defaultFontName}
+                                                    tagBgColor={tagBgColor}
+                                                    tagColor={tagColor}
+                                                    />
                                             );
                                         })
                                     }
@@ -275,9 +293,9 @@ class Select2 extends Component {
 // define your styles
 const styles = StyleSheet.create({
     container: {
-        width: '100%', minHeight: 45, borderRadius: 2, paddingHorizontal: 16,
+        width: '100%', minHeight: 40, borderRadius: 2, paddingHorizontal: 2,
         flexDirection: 'row', alignItems: 'center', borderWidth: 1,
-        borderColor: '#cacaca', paddingVertical: 4
+        borderColor: '#cacaca', paddingVertical: 2
     },
     modalContainer: {
         paddingTop: 16, backgroundColor: '#fff', borderTopLeftRadius: 8, borderTopRightRadius: 8
@@ -286,11 +304,11 @@ const styles = StyleSheet.create({
         fontSize: 16, marginBottom: 16, width: '100%', textAlign: 'center'
     },
     line: {
-        height: 1, width: '100%', backgroundColor: '#cacaca'
+        height: 1, width: '100%', /*backgroundColor: '#cacaca'*/
     },
     inputKeyword: {
-        height: 40, borderRadius: 5, borderWidth: 1, borderColor: '#cacaca',
-        paddingLeft: 8, marginHorizontal: 24, marginTop: 16
+        height: 40, borderRadius: 5, borderWidth: 1, /*borderColor: '#cacaca',*/
+        paddingLeft: 8, marginHorizontal: 24, marginTop: 16,
     },
     buttonWrapper: {
         marginVertical: 16, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'
@@ -302,24 +320,25 @@ const styles = StyleSheet.create({
         fontSize: 14, color: 'gray', flex: 1
     },
     tagWrapper: {
-        flexDirection: 'row', flexWrap: 'wrap'
+        flexDirection: 'row', flexWrap: 'wrap',     
+        width:'100%'   
     },
     listOption: {
         paddingHorizontal: 24,
         paddingTop: 1, marginTop: 16
     },
     itemWrapper: {
-        borderBottomWidth: 1, borderBottomColor: '#eaeaea',
+        borderBottomWidth: 1, /*borderBottomColor: '#eaeaea',*/
         paddingVertical: 12, flexDirection: 'row', alignItems: 'center'
     },
     itemText: {
-        fontSize: 16, color: '#333', flex: 1
+        fontSize: 14, /*color: '#333',*/ flex: 1
     },
     itemIcon: {
         width: 30, textAlign: 'right'
     },
     empty: {
-        fontSize: 16, color: 'gray', alignSelf: 'center', textAlign: 'center', paddingTop: 16
+        fontSize: 14, /*color: 'gray',*/ alignSelf: 'center', textAlign: 'center', paddingTop: 16
     }
 });
 
