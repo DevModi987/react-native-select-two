@@ -1,6 +1,6 @@
 //import liraries
 import React, { Component } from 'react';
-import { Text, StyleSheet, TouchableOpacity, View, FlatList, TextInput, Dimensions, Animated, Platform } from 'react-native';
+import { Text, StyleSheet, TouchableOpacity, View, FlatList, TextInput, Dimensions, Animated, Platform,SafeAreaView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Modal from 'react-native-modal';
 import Button from './lib/Button';
@@ -9,7 +9,7 @@ import utilities from './lib/utilities';
 import PropTypes from 'prop-types';
 
 const { height } = Dimensions.get('window');
-const INIT_HEIGHT = height * 0.6;
+const INIT_HEIGHT = height * 0.5;
 // create a component
 class Select2 extends Component {
     static defaultProps = {
@@ -32,11 +32,22 @@ class Select2 extends Component {
     animatedHeight = new Animated.Value(INIT_HEIGHT);
 
     componentDidMount() {
+        Dimensions.addEventListener("change", this.handleDimensionChange);
         this.init();
     };
 
     UNSAFE_componentWillReceiveProps(newProps) {
         this.init(newProps);
+    }
+
+    componentWillUnmount() {
+        Dimensions.removeEventListener("change", this.handleDimensionChange)
+    };
+
+    handleDimensionChange = e => {
+        const { height } = e.window;
+        const INIT_HEIGHT = height * 0.5;
+        this.animatedHeight.setValue(INIT_HEIGHT);
     }
 
     init(newProps) {
@@ -148,6 +159,7 @@ class Select2 extends Component {
                     animationOutTiming={300}
                     hideModalContentWhileAnimating
                     isVisible={show}>
+                    <SafeAreaView style={{justifyContent: 'flex-end', margin: 0}}> 
                     <Animated.View style={[styles.modalContainer, modalStyle, { height: this.animatedHeight }]}>
                         <View>
                             <Text style={[styles.title, this.defaultFont, { color: colorTheme }]}>
@@ -166,14 +178,16 @@ class Select2 extends Component {
                                     onChangeText={keyword => this.setState({ keyword })}
                                     onFocus={() => {
                                         Animated.spring(this.animatedHeight, {
-                                            toValue: INIT_HEIGHT + (Platform.OS === 'ios' ? height * 0.2 : 0),
-                                            friction: 7
+                                            toValue: INIT_HEIGHT + (Platform.OS === 'ios' ? height * 0.2 : 0),                                                                                       
+                                            friction: 7,
+                                            useNativeDriver: false
                                         }).start();
                                     }}
                                     onBlur={() => {
                                         Animated.spring(this.animatedHeight, {
                                             toValue: INIT_HEIGHT,
-                                            friction: 7
+                                            friction: 7,
+                                            useNativeDriver: false
                                         }).start();
                                     }}
                                 />
@@ -215,6 +229,7 @@ class Select2 extends Component {
                                 style={[styles.button, buttonStyle, { marginLeft: 5, marginRight: 10 }]} />
                         </View>
                     </Animated.View>
+                    </SafeAreaView>
                 </Modal>
                 {
                     preSelectedItem.length > 0
