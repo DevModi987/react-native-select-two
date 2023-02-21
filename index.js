@@ -9,9 +9,6 @@ import utilities from './lib/utilities';
 import PropTypes from 'prop-types';
 import changeNavigationBarColor from 'react-native-navigation-bar-color';
 
-let ScreenWidth = Dimensions.get("screen").width;
-let ScreenHeight = Dimensions.get("screen").height;
-
 const { height } = Dimensions.get('window');
 const INIT_HEIGHT = height * 0.5;
 // create a component
@@ -172,8 +169,8 @@ class Select2 extends Component {
                     onModalWillShow={()=>{changeNavigationBarColor(bottomNavShowColor, true)}}    
                     onModalWillHide={()=>{changeNavigationBarColor(bottomNavHideColor, true)}}
                     >
-                    <SafeAreaView style={{justifyContent: 'flex-end', margin: 0}}> 
-                    <Animated.View style={[styles.modalContainer, modalStyle, { height: this.animatedHeight }]}>
+                    <SafeAreaView style={{justifyContent: 'flex-end', margin: 0,backgroundColor:bottomNavShowColor,borderTopLeftRadius: 25,borderTopRightRadius:25,}}> 
+                    <View style={[styles.modalContainer, modalStyle, /*{ height: this.animatedHeight }*/]}>
                         <View>
                             <Text style={[styles.title, this.defaultFont, { color: colorTheme }]}>
                                 {popupTitle || title}
@@ -242,7 +239,7 @@ class Select2 extends Component {
                                 textStyle={buttonTextStyle}
                                 style={[styles.button, buttonStyle, { marginLeft: 5, marginRight: 10 }]} />
                         </View>
-                    </Animated.View>
+                    </View>
                     </SafeAreaView>
                 </Modal>
                 {
@@ -295,10 +292,10 @@ const styles = StyleSheet.create({
     container: {
         width: '100%', minHeight: 40, borderRadius: 2, paddingHorizontal: 2,
         flexDirection: 'row', alignItems: 'center', borderWidth: 1,
-        borderColor: '#cacaca', paddingVertical: 2
+        borderColor: '#cacaca', paddingVertical: 2,
     },
     modalContainer: {
-        paddingTop: 16, backgroundColor: '#fff', borderTopLeftRadius: 8, borderTopRightRadius: 8
+        paddingTop: 16, backgroundColor: '#fff', borderTopLeftRadius: 25, borderTopRightRadius: 25
     },
     title: {
         fontSize: 16, marginBottom: 16, width: '100%', textAlign: 'center'
