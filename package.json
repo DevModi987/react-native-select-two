@@ -1,15 +1,41 @@
 {
-  "name": "react-native-select-two",
-  "version": "1.1.0",
-  "description": "Component like Select2 on web for React Native",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
+  "_from": "git+https://github.com/DevModi987/react-native-select-two.git",
+  "_id": "react-native-select-two@1.1.0",
+  "_inBundle": false,
+  "_integrity": "",
+  "_location": "/react-native-select-two",
+  "_phantomChildren": {},
+  "_requested": {
     "type": "git",
-    "url": "git+https://github.com/xuho/react-native-select-two.git"
+    "raw": "https://github.com/DevModi987/react-native-select-two.git",
+    "rawSpec": "https://github.com/DevModi987/react-native-select-two.git",
+    "saveSpec": "git+https://github.com/DevModi987/react-native-select-two.git",
+    "fetchSpec": "https://github.com/DevModi987/react-native-select-two.git",
+    "gitCommittish": null
   },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "git+https://github.com/DevModi987/react-native-select-two.git#5ee7762c649005d9bd18b43628566f48c734d300",
+  "_spec": "https://github.com/DevModi987/react-native-select-two.git",
+  "_where": "/Users/sanganiajay/Desktop/Devankshu/Devankshu/Brain",
+  "author": {
+    "name": "xuho"
+  },
+  "bugs": {
+    "url": "https://github.com/xuho/react-native-select-two/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "Component like Select2 on web for React Native",
+  "devDependencies": {
+    "react": "16.6.1",
+    "react-native": "~0.57.7",
+    "react-native-modal": "^11.1.0",
+    "react-native-vector-icons": "^4.2.0"
+  },
+  "homepage": "https://github.com/xuho/react-native-select-two#readme",
   "keywords": [
     "react-native",
     "react-component",
@@ -23,22 +49,21 @@
     "select2",
     "component"
   ],
-  "author": "xuho",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/xuho/react-native-select-two/issues"
-  },
-  "homepage": "https://github.com/xuho/react-native-select-two#readme",
+  "main": "index.js",
+  "name": "react-native-select-two",
   "peerDependencies": {
     "react": "*",
     "react-native": "*",
     "react-native-vector-icons": "^4.2.0",
     "react-native-modal": "^11.1.0"
   },
-  "devDependencies": {
-    "react": "16.6.1",
-    "react-native": "~0.57.7",
-    "react-native-vector-icons": "^4.2.0",
-    "react-native-modal": "^11.1.0"
-  }
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xuho/react-native-select-two.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "1.1.0"
 }

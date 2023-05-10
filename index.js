@@ -32,8 +32,13 @@ class Select2 extends Component {
     }
     animatedHeight = new Animated.Value(INIT_HEIGHT);
 
+    constructor(props){
+        super(props)
+        this.changeEventListener = null
+    }
+
     componentDidMount() {
-        Dimensions.addEventListener("change", this.handleDimensionChange);
+        this.changeEventListener = Dimensions.addEventListener("change", this.handleDimensionChange);
         this.init();
     };
 
@@ -42,7 +47,8 @@ class Select2 extends Component {
     }
 
     componentWillUnmount() {
-        Dimensions.removeEventListener("change", this.handleDimensionChange)
+     //   Dimensions.removeEventListener("change", this.handleDimensionChange)        
+        this.changeEventListener.remove()
     };
 
     handleDimensionChange = e => {
@@ -53,13 +59,16 @@ class Select2 extends Component {
 
     init(newProps) {
         let preSelectedItem = [];
+        let selectedItem    = [];
         let { data } = newProps || this.props;
+
         data.map(item => {
-            if (item.checked) {
+            if (item.checked) {                
                 preSelectedItem.push(item);
+                selectedItem.push(item);
             }
         })
-        this.setState({ data, preSelectedItem });
+        this.setState({ data, preSelectedItem,selectedItem});
     }
 
     get dataRender() {
@@ -93,6 +102,7 @@ class Select2 extends Component {
     }
 
     onItemSelected = (item, isSelectSingle) => {
+
         let selectedItem = [];
         let { data } = this.state;
         item.checked = !item.checked;
@@ -186,7 +196,7 @@ class Select2 extends Component {
                                     placeholder={searchPlaceHolderText}
                                     placeholderTextColor={placeholderTextColor}
                                     selectionColor={colorTheme}
-                                    onChangeText={keyword => this.setState({ keyword })}
+                                    onChangeText={keyword => this.setState({ keyword })}                                    
                                     onFocus={() => {
                                         Animated.spring(this.animatedHeight, {
                                             toValue: INIT_HEIGHT + (Platform.OS === 'ios' ? height * 0.2 : 0),                                                                                       
@@ -226,11 +236,11 @@ class Select2 extends Component {
                             <Button
                                 defaultFont={this.defaultFont}
                                 onPress={() => {
-                                    let selectedIds = [], selectedObjectItems = [];
+                                    let selectedIds = [], selectedObjectItems = [];                                                                    
                                     selectedItem.map(item => {
                                         selectedIds.push(item.id);
                                         selectedObjectItems.push(item);
-                                    })
+                                    })                                    
                                     onSelect && onSelect(selectedIds, selectedObjectItems);
                                     this.setState({ show: false, keyword: '', preSelectedItem: selectedItem });
                                 }}
@@ -242,13 +252,13 @@ class Select2 extends Component {
                     </View>
                     </SafeAreaView>
                 </Modal>
-                {
+                {                    
                     preSelectedItem.length > 0
                         ? (
                             isSelectSingle
                                 ? <Text style={[styles.selectedTitlte, this.defaultFont, selectedTitleStyle, { color: '#333' }]}>{preSelectedItem[0].name}</Text>
                                 : <View style={styles.tagWrapper}>
-                                    {
+                                    {                                        
                                         preSelectedItem.map((tag, index) => {
                                             return (
                                                 <TagItem
